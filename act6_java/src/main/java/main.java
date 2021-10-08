@@ -45,7 +45,7 @@ public class main {
     public static double getPromedio(double calificaciones[], double promedio) {
         for(int i=1; i<=5; i++){
             promedio = promedio + calificaciones[i];
-        }        
+        }
         return promedio/5;
     }
 
