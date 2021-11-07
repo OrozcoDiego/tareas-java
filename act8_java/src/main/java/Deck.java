@@ -19,89 +19,77 @@ import java.util.List;
 public class Deck {
             
     public static void main(String[] args) throws IOException {
-        // TODO code application logic here
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        // TODO code application logic here        
         List<String> deck1 = new ArrayList<>();
         String opcion;
+             
+        String[] palo = {"Pica, ", "Corazon, ", "Diamante, ", "Trebol, "};
+        String[] valor = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+        Integer cont = 0;
         
-        deck1.add("treboles, negro, 2");
-        deck1.add("treboles, negro, 3");
-        deck1.add("treboles, negro, 4");
-        deck1.add("treboles, negro, 5");
-        deck1.add("treboles, negro, 6");
-        deck1.add("treboles, negro, 7");
-        deck1.add("treboles, negro, 8");
-        deck1.add("treboles, negro, 9");
-        deck1.add("treboles, negro, 10");
-        deck1.add("treboles, negro, A");
-        deck1.add("treboles, negro, J");
-        deck1.add("treboles, negro, Q");
-        deck1.add("treboles, negro, K");
-        
-        deck1.add("corazones, rojo, 2");
-        deck1.add("corazones, rojo, 3");
-        deck1.add("corazones, rojo, 4");
-        deck1.add("corazones, rojo, 5");
-        deck1.add("corazones, rojo, 6");
-        deck1.add("corazones, rojo, 7");
-        deck1.add("corazones, rojo, 8");
-        deck1.add("corazones, rojo, 9");
-        deck1.add("corazones, rojo, 10");
-        deck1.add("corazones, rojo, A");
-        deck1.add("corazones, rojo, J");
-        deck1.add("corazones, rojo, Q");
-        deck1.add("corazones, rojo, K");
-        
-        deck1.add("picas, negro, 2");
-        deck1.add("picas, negro, 3");
-        deck1.add("picas, negro, 4");
-        deck1.add("picas, negro, 5");
-        deck1.add("picas, negro, 6");
-        deck1.add("picas, negro, 7");
-        deck1.add("picas, negro, 8");
-        deck1.add("picas, negro, 9");
-        deck1.add("picas, negro, 10");
-        deck1.add("picas, negro, A");
-        deck1.add("picas, negro, J");
-        deck1.add("picas, negro, Q");
-        deck1.add("picas, negro, K");
-        
-        deck1.add("diamantes, rojo, 2");
-        deck1.add("diamantes, rojo, 3");
-        deck1.add("diamantes, rojo, 4");
-        deck1.add("diamantes, rojo, 5");
-        deck1.add("diamantes, rojo, 6");
-        deck1.add("diamantes, rojo, 7");
-        deck1.add("diamantes, rojo, 8");
-        deck1.add("diamantes, rojo, 9");
-        deck1.add("diamantes, rojo, 10");
-        deck1.add("diamantes, rojo, A");
-        deck1.add("diamantes, rojo, J");
-        deck1.add("diamantes, rojo, Q");
-        deck1.add("diamantes, rojo, K");  
+        for (int i = 0; i < palo.length; i++) {
+            for (int j = 0; j < valor.length; j++) {
+                deck1.add(cont, (palo[i] + getColor(palo[i]) + valor[j]));
+                cont = cont + 1;
+            }
+        }
         
         do{
-            System.out.println("Elige una opcion:"
-                + "\n a) shuffle: mezclar el deck"
-                + "\n b) head: mostrar la primera carta del deck"
-                + "\n c) pick: seleccionar una carta al azar"
-                + "\n d) hand: regresará un arreglo de cinco cartas del deck"
-                + "\n e) salir");
-            opcion = br.readLine();
-            
+            opcion = showMenu();
             switch(opcion){
                 case "a": deck1 = shuffle(deck1); break;
-                case "b": deck1 = head(deck1); break;
-                case "c": deck1 = pick(deck1); break;
-                case "d": deck1 = hand(deck1); break;
+                case "b":   try {
+                                deck1 = head(deck1);
+                            }catch (IndexOutOfBoundsException e){
+                                System.out.println("Se han agotado las cartas");
+                                opcion = "e";
+                            }
+                            break;                    
+                case "c":   try {
+                                deck1 = pick(deck1);
+                            }catch (IndexOutOfBoundsException e){
+                                System.out.println("Se han agotado las cartas");
+                                opcion = "e";
+                            }
+                            break;
+                case "d":   try {
+                                deck1 = hand(deck1);
+                            }catch (IndexOutOfBoundsException e){
+                                System.out.println("Se han agotado las cartas");
+                                opcion = "e";
+                            }
+                            break;
                 case "e": System.out.println("Adios"); break;
-                default: System.out.println("Esa opcion no existe"); break;
-            }
-            System.out.println();
-            
+                default: System.out.println("Opcion no valida"); break;
+            }            
+            System.out.println(); 
         } while (!opcion.equals("e"));
-             
+        
     }
+        
+    public static String showMenu() throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String opcion;          
+        System.out.println("Elige una opcion:"
+            + "\n a) shuffle: mezclar el deck"
+            + "\n b) head: mostrar la primera carta del deck"
+            + "\n c) pick: seleccionar una carta al azar"
+            + "\n d) hand: regresará un arreglo de cinco cartas del deck"
+            + "\n e) salir");
+        opcion = br.readLine();   
+        return opcion;
+    }
+        
+    public static String getColor(String palo) {
+        if (palo.toLowerCase().equals("pica, ") || palo.toLowerCase().equals("trebol, ")) {
+            return "negro, ";
+        }
+        if (palo.toLowerCase().equals("corazon, ") || palo.toLowerCase().equals("diamante, ")) {
+            return "rojo, ";
+        }
+        return null;
+    }
+        
     
     //Metodo para revolver las cartas del deck
     public static List<String> shuffle(List<String> deck1) {
@@ -109,6 +97,7 @@ public class Deck {
         System.out.println("Se mezcló el Deck");
         return deck1;
     }
+    
     
     public static List<String> head (List<String> deck1) {        
         System.out.println(deck1.get(0) + "\nQuedan " + (deck1.size()-1));
